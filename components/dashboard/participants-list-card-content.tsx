@@ -1,42 +1,33 @@
 import { ImageIcon, UserCircle2Icon } from "lucide-react";
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { CardDescription, CardTitle } from "../ui/card";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { useAppSelector } from "@/store/hook";
-import {
-  selectFindHowManyPayWithoutDiferences,
-  selectListForResult,
-} from "@/store/rateios/rateios.selectors";
+
 import { Label } from "../ui/label";
 import Image from "next/image";
+import { IListForResult, IwhoPaid } from "@/store/rateios/rateios.reducer";
 
 interface ParticipantsListCardContentProps {
   name: string;
   value: number;
+  whoPaid: IwhoPaid[];
+  listForResult: IListForResult[];
 }
 const ParticipantsListCardContent = ({
   name,
   value,
+  listForResult,
+  whoPaid,
 }: ParticipantsListCardContentProps) => {
-  const expenses = useAppSelector(selectFindHowManyPayWithoutDiferences);
-  const listForResult = useAppSelector(selectListForResult);
-
   const participantExp = () => {
-    const result = expenses.reduce(
+    const result = whoPaid.reduce(
       (acc: { expense: string; value: number; icon: string }[], item) => {
         const findPerson = item.names.find((person) => person.name === name);
-
         if (findPerson) {
           return [
             ...acc,
@@ -114,16 +105,16 @@ const ParticipantsListCardContent = ({
                     )}
                     <p className="capitalize">{exp.expense}</p>
                   </div>
-                  <p>U$ {exp.value}</p>
+                  <p>U$ {exp.value?.toFixed(2)}</p>
                 </div>
               ))}
               <div className="text-sm flex justify-between">
-                <Label>Sum of shares</Label>
-                <Label>U$ {totalExpenses()}</Label>
+                <Label>Total cost</Label>
+                <Label>U$ {totalExpenses()?.toFixed(2)}</Label>
               </div>
               <div className="text-sm flex justify-between">
                 <Label>Total expend</Label>
-                <Label>U$ {totalExpend()}</Label>
+                <Label>U$ {totalExpend()?.toFixed(2)}</Label>
               </div>
             </div>
           </div>

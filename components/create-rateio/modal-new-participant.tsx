@@ -27,7 +27,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 import { useState } from "react";
-import PopoverIcons from "./popover-icons";
+import PopoverIcons from "../common/popover-icons";
 import Image from "next/image";
 import { setRateioParticipants } from "@/store/rateios/rateios.actions";
 
@@ -86,7 +86,7 @@ const ModalNewParticipant = () => {
 
   return (
     <Dialog open={modalCreate.isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="max-h-[90%] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex justify-center items-center flex-col gap-y-4 pb-2">
             <div className="flex items-center gap-x-2 font-bold py-1">

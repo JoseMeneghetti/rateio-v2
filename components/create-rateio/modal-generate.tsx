@@ -3,7 +3,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Badge } from "../ui/badge";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { RootState } from "@/store/store";
 import { setModalGenerateClose } from "@/store/modal/modal.actions";
 
 import { Button } from "../ui/button";
@@ -22,8 +21,19 @@ import {
 import { Switch } from "../ui/switch";
 import Image from "next/image";
 import { ImageIcon, InfoIcon } from "lucide-react";
-import { setResult } from "@/store/rateios/rateios.actions";
 import { ISuggestionItem } from "@/store/rateios/rateios.reducer";
+import {
+  selectActiveNomeRateio,
+  selectActiveParticipants,
+} from "@/store/rateios/rateios.selectors";
+import { selectModalGenerate } from "@/store/modal/modal.selectors";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import {
+  setActiveRateio,
+  setResetActiveRateio,
+} from "@/store/rateios/rateios.actions";
+import { rateioEdit } from "@/service/rateio/rateio-service";
+import { toast } from "../ui/use-toast";
 
 const formSchema = z.object({
   expenses: z.array(
@@ -51,20 +61,22 @@ export interface IExpensesShare {
 }
 
 const ModalGenerate = () => {
-  const { modalGenerate } = useAppSelector((state: RootState) => state.modal);
-  const { participants } = useAppSelector((state: RootState) => state.rateio);
+  const modalGenerate = useAppSelector(selectModalGenerate);
+  const participants = useAppSelector(selectActiveParticipants);
+  const nameRateio = useAppSelector(selectActiveNomeRateio);
 
   const [controlDivision, setControlDivision] = useState<IExpensesShare[]>();
 
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const params = useParams();
 
   const onClose = () => {
     dispatch(setModalGenerateClose());
   };
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      console.log(values)
       if (values) {
         const findHowManyPayWithoutDiferences = values.expenses.map(
           (expense) => {
@@ -242,25 +254,40 @@ const ModalGenerate = () => {
             },
             []
           );
-          console.log(
-            "findHowManyPayWithoutDiferences",
-            findHowManyPayWithoutDiferences
-          );
-          console.log("listForResult", listForResult);
-          console.log("onlyParticipants", onlyParticipants);
-          console.log("total", total);
-          console.log("sugestion", suggestion);
 
-          dispatch(
-            setResult({
-              findHowManyPayWithoutDiferences,
-              listForResult,
-              onlyParticipants,
-              sumOfPaids,
-              total,
-              suggestion,
-            })
-          );
+          const newRateio = {
+            participants: participants,
+            whoPaid: findHowManyPayWithoutDiferences,
+            listForResult,
+            onlyParticipants,
+            sumOfPaids,
+            total,
+            suggestion,
+            nameRateio: nameRateio,
+          };
+
+          if (params.id && typeof params.id === "string") {
+            try {
+              const saved = await rateioEdit(newRateio, params.id);
+              router.refresh();
+              dispatch(setResetActiveRateio());
+              toast({
+                title: "Success!",
+                description: "Your rateio has been edited successefully",
+              });
+              router.push(`/dashboard/${saved.data.id}`);
+            } catch {
+              toast({
+                variant: "destructive",
+                title: "Error!",
+                description:
+                  "An error happened trying to edit your rateio. Please enter in contact.",
+              });
+            }
+          } else {
+            dispatch(setActiveRateio(newRateio));
+            router.push("/dashboard");
+          }
         }
       }
     } catch (error) {
@@ -355,7 +382,7 @@ const ModalGenerate = () => {
                 {fields?.map((el, index) => (
                   <div
                     key={el.id}
-                    className="flex flex-col flex-grow gap-4 border p-4 rounded-lg "
+                    className="flex flex-col flex-grow gap-4 border p-4 rounded-lg max-w-[433px]"
                   >
                     <div className="flex justify-start gap-8 items-start">
                       <div className="flex flex-row justify-start flex-grow gap-8">
@@ -390,7 +417,9 @@ const ModalGenerate = () => {
                           <div className="rounded-md border p-2">
                             <FormLabel>
                               Expense Value
-                              <FormDescription>U$ {el.value}</FormDescription>
+                              <FormDescription>
+                                U$ {el.value.toFixed(2)}
+                              </FormDescription>
                             </FormLabel>
                           </div>
                           <div className="rounded-md border p-2">
@@ -398,7 +427,7 @@ const ModalGenerate = () => {
                               Division/Person
                               <FormDescription>
                                 U$
-                                {handleDivision(el.value, index)}
+                                {handleDivision(el.value, index).toFixed(2)}
                               </FormDescription>
                             </FormLabel>
                           </div>

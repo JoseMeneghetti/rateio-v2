@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  rateio          Rateio[]
+  RateioWhiteList RateioWhiteList[]
+}
+
+model Rateio {
+  id                  String   @id @default(cuid())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  nameRateio          String
+  whoPaid             String
+  listForResult       String
+  onlyParticipants    String
+  participants        String
+  sumOfPaids          String
+  total               String
+  suggestion          String
+  password            String?
+  userId              String
+  whiteListPermission Boolean  @default(false)
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  rateioWhiteList RateioWhiteList[]
+}
+
+model RateioWhiteList {
+  id        String @id @default(cuid())
+  user_id   String
+  rateio_id String
+
+  user   User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  rateio Rateio @relation(fields: [rateio_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, rateio_id])
+}

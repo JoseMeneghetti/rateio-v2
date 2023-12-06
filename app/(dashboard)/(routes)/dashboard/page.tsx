@@ -1,22 +1,23 @@
 "use client";
 
 import Heading from "@/components/common/heading";
-import DashboardTabExpense from "@/components/dashboard/dashboard-tab-expenses";
-import DashboardTabParticipants from "@/components/dashboard/dashboard-tab-participants";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import ModalAuthRateio from "@/components/dashboard/modal-auth-rateio";
+import ModalSaveRateio from "@/components/dashboard/modal-save-rateio";
+import SaveRateioButton from "@/components/dashboard/save-rateio-button";
+import TabsComponent from "@/components/dashboard/tabs-component";
+
 import { useAppSelector } from "@/store/hook";
-import {
-  selectFindHowManyPayWithoutDiferences,
-  selectTotal,
-} from "@/store/rateios/rateios.selectors";
+
+import { selectActiveRateio } from "@/store/rateios/rateios.selectors";
 import { FileWarningIcon, SplitIcon } from "lucide-react";
 
 const DashboardPage = () => {
-  const total = useAppSelector(selectTotal);
+  const rateio = useAppSelector(selectActiveRateio);
 
-  if (total.length < 1) {
+  if (rateio.total?.length < 1) {
     return (
-      <div className="px-4 lg:px-8">
+      <div className="p-4 lg:p-8">
         <Heading
           title="DashBoard - Rateio not Found"
           description="We have no information about your rateio, try to create a new one"
@@ -24,31 +25,26 @@ const DashboardPage = () => {
           iconColor="text-pink-700"
           bgColor="bg-pink-700/10"
         />
+        <ModalAuthRateio />
       </div>
     );
   }
 
   return (
-    <div className="px-4 lg:px-8">
-      <Heading
-        title="DashBoard - Rateio Result"
-        description="See infos and control you rateio"
-        icon={SplitIcon}
-        iconColor="text-pink-700"
-        bgColor="bg-pink-700/10"
-      />
-      <Tabs defaultValue="expenses" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 max-w-[400px]">
-          <TabsTrigger value="expenses">Expenses Overview</TabsTrigger>
-          <TabsTrigger value="participants">Participants Overview</TabsTrigger>
-        </TabsList>
-        <TabsContent value="expenses">
-          <DashboardTabExpense />
-        </TabsContent>
-        <TabsContent value="participants">
-          <DashboardTabParticipants />
-        </TabsContent>
-      </Tabs>
+    <div className="p-4 lg:p-8">
+      <div className="flex justify-between">
+        <Heading
+          title={`DashBoard - ${rateio.nameRateio ?? "Rateio"}`}
+          description="See infos and control you rateio"
+          icon={SplitIcon}
+          iconColor="text-pink-700"
+          bgColor="bg-pink-700/10"
+        />
+        <SaveRateioButton />
+      </div>
+
+      <TabsComponent rateio={rateio} />
+      <ModalSaveRateio />
     </div>
   );
 };

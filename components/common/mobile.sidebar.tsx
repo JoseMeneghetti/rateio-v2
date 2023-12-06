@@ -1,12 +1,15 @@
 "use client";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import Sidebar from "./sidebar";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import Sidebar from "./sidebar";
+import { Rateio } from "@prisma/client";
 
-interface MobileSidebarProps {}
-const MobileSidebar = ({}: MobileSidebarProps) => {
+interface MobileSidebarProps {
+  rateios: Rateio[];
+}
+const MobileSidebar = ({ rateios }: MobileSidebarProps) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -25,7 +28,7 @@ const MobileSidebar = ({}: MobileSidebarProps) => {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="p-0">
-        <Sidebar />
+        <Sidebar rateios={rateios} />
       </SheetContent>
     </Sheet>
   );

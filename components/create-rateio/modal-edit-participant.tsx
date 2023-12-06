@@ -23,7 +23,7 @@ import { EditIcon, ImageIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
 import { useEffect, useState } from "react";
-import PopoverIcons from "./popover-icons";
+import PopoverIcons from "../common/popover-icons";
 import Image from "next/image";
 import { setEditExpense } from "@/store/rateios/rateios.actions";
 
@@ -79,7 +79,7 @@ const ModalEditParticipant = () => {
 
   return (
     <Dialog open={modalEdit.isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="max-h-[90%] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex justify-center items-center flex-col gap-y-4 pb-2">
             <div className="flex items-center gap-x-2 font-bold py-1">

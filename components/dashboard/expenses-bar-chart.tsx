@@ -1,5 +1,3 @@
-"use client";
-
 import {
   BarChart,
   Bar,
@@ -11,12 +9,13 @@ import {
 import React from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { IFindHowManyPayWithoutDiferences } from "@/store/rateios/rateios.reducer";
+import { IwhoPaid } from "@/store/rateios/rateios.reducer";
 
 interface ExpensesBarChartProps {
-  expenses: IFindHowManyPayWithoutDiferences[];
+  whoPaid: IwhoPaid[];
 }
-const ExpensesBarChart = ({ expenses }: ExpensesBarChartProps) => {
+
+const ExpensesBarChart = ({ whoPaid }: ExpensesBarChartProps) => {
   return (
     <Card className="text-card-foreground shadow">
       <CardHeader className="p-4">
@@ -26,7 +25,7 @@ const ExpensesBarChart = ({ expenses }: ExpensesBarChartProps) => {
       </CardHeader>
       <CardContent className="h-72 max-h-[300px] p-0">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={expenses}>
+          <BarChart data={whoPaid}>
             <XAxis
               dataKey="expense"
               stroke="transparent"
@@ -41,7 +40,7 @@ const ExpensesBarChart = ({ expenses }: ExpensesBarChartProps) => {
             <Tooltip />
             <Bar
               dataKey="value"
-              fill="#81ff47"
+              fill="#ADFA1B"
               maxBarSize={41}
               //   activeBar={<Rectangle stroke="transparent" fill="transparent" />}
             />

@@ -1,8 +1,19 @@
+import { getServerSession } from "next-auth";
+import { AuthOptions } from "../api/auth/[...nextauth]/options";
+import LandingNavbar from "@/components/landing/navbar";
+import LandingHero from "@/components/landing/hero";
+import LandingContent from "@/components/landing/content";
 
-export default function Home() {
+const LandingPage = async () => {
+  const session = await getServerSession(AuthOptions);
+
   return (
-    <main className="h-full">
+    <div className="h-full">
+      <LandingNavbar session={session} />
+      <LandingHero session={session} />
+      <LandingContent />
+    </div>
+  );
+};
 
-    </main>
-  )
-}
+export default LandingPage;

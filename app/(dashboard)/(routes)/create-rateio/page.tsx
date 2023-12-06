@@ -15,7 +15,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { formSchema } from "./constants";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import {
   setModalCreateOpen,
@@ -23,21 +22,24 @@ import {
 } from "@/store/modal/modal.actions";
 import ModalNewParticipant from "@/components/create-rateio/modal-new-participant";
 import { setRateioName } from "@/store/rateios/rateios.actions";
-import { RootState } from "@/store/store";
 import { IParticipants } from "@/store/rateios/rateios.reducer";
 import { CardParticipant } from "@/components/create-rateio/card-participant";
 import ModalAddExpenses from "@/components/create-rateio/modal-add-expenses";
 import ModalEditParticipant from "@/components/create-rateio/modal-edit-participant";
 import ModalDeleteParticipant from "@/components/create-rateio/modal-delete-expense";
 import ModalGenerate from "@/components/create-rateio/modal-generate";
+import {
+  selectActiveNomeRateio,
+  selectActiveParticipants,
+} from "@/store/rateios/rateios.selectors";
+import { useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
-import { selectParticipants } from "@/store/rateios/rateios.selectors";
 
 const DashboardPage = () => {
   const [nameRateio, setNameRateio] = useState("");
   const debouncedNameRateio = useDebounce<string>(nameRateio, 500);
 
-  const participants = useAppSelector(selectParticipants);
+  const participants = useAppSelector(selectActiveParticipants);
 
   const dispatch = useAppDispatch();
 
@@ -48,12 +50,14 @@ const DashboardPage = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-  };
+  // const onSubmit = (values: z.infer<typeof formSchema>) => {
+  //   console.log(values);
+  // };
 
   useEffect(() => {
-    dispatch(setRateioName(nameRateio));
+    if (nameRateio) {
+      dispatch(setRateioName(nameRateio));
+    }
   }, [debouncedNameRateio]);
 
   return (
@@ -70,7 +74,7 @@ const DashboardPage = () => {
           <div className="flex lg:px-40 ">
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                // onSubmit={form.handleSubmit(onSubmit)}
                 className="flex-grow gap-4 flex flex-col"
               >
                 <FormField

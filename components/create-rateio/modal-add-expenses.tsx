@@ -22,7 +22,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { ImageIcon, PlusCircleIcon } from "lucide-react";
-import PopoverIcons from "./popover-icons";
+import PopoverIcons from "../common/popover-icons";
 import { setNewExpense } from "@/store/rateios/rateios.actions";
 
 const ModalAddExpenses = () => {
@@ -65,7 +65,7 @@ const ModalAddExpenses = () => {
 
   return (
     <Dialog open={modalAddExpense.isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="max-h-[90%] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex justify-center items-center flex-col gap-y-4 pb-2">
             <div className="flex items-center gap-x-2 font-bold py-1">

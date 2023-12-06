@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
   Card,
@@ -10,12 +8,13 @@ import {
 } from "../ui/card";
 
 import ExpensesListCardContent from "./expenses-list-card-content";
-import { IFindHowManyPayWithoutDiferences } from "@/store/rateios/rateios.reducer";
+import { IParticipants, IwhoPaid } from "@/store/rateios/rateios.reducer";
 
 interface ExpensesListCardProps {
-  expenses: IFindHowManyPayWithoutDiferences[];
+  whoPaid: IwhoPaid[];
+  participants: IParticipants[];
 }
-const ExpensesListCard = ({ expenses }: ExpensesListCardProps) => {
+const ExpensesListCard = ({ whoPaid, participants }: ExpensesListCardProps) => {
   return (
     <Card className="text-card-foreground shadow">
       <CardHeader>
@@ -23,12 +22,14 @@ const ExpensesListCard = ({ expenses }: ExpensesListCardProps) => {
           Expenses Overview
         </CardTitle>
         <CardDescription className="text-sm leading-none tracking-tight">
-          find how much the people expend.
+          find how much the people expend
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {expenses.map((expense) => (
+        {whoPaid?.map((expense) => (
           <ExpensesListCardContent
+            participants={participants}
+            whoPaid={whoPaid}
             key={expense.expense}
             expense={expense.expense}
             icon={expense.icon}

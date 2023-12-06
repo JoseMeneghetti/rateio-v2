@@ -3,7 +3,7 @@ import HeaderTitle from "./header-title";
 
 const Header = () => {
   return (
-    <div className="hidden md:flex justify-between py-8 px-16 bg-[#111827] flex-grow shadow-lg">
+    <div className="hidden md:flex justify-between py-8 px-16 bg-zinc-900 shadow-lg">
       <div>
         <Link href={"/"} className="flex items-center gap-2">
           <h1
@@ -22,12 +22,12 @@ const Header = () => {
       </div>
 
       <div className="flex gap-12">
-        <Link href={"/#"} className="text-white text-lg">
+        {/* <Link href={"/#"} className="text-white text-lg">
           Procurar
         </Link>
         <Link href={"/#"} className="text-white text-lg">
           Limpar
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

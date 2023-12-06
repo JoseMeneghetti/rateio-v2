@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { mockIcons } from "./constants/icons";
+import { mockIcons } from "../create-rateio/constants/icons";
 import { PopoverClose } from "@radix-ui/react-popover";
 
 interface PopoverIconsProps {

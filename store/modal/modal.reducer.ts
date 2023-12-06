@@ -8,8 +8,12 @@ import {
   setModalDeleteOpen,
   setModalEditClose,
   setModalEditOpen,
-  setModalGenerateClose,
   setModalGenerateOpen,
+  setModalGenerateClose,
+  setModalSaveRateioOpen,
+  setModalSaveRateioClose,
+  setModalAuthRateioOpen,
+  setModalAuthRateioClose,
 } from "./modal.actions";
 import { IParticipantsPayload } from "../rateios/rateios.actions";
 
@@ -19,6 +23,8 @@ export interface IModals {
   modalEdit: IModalEdit;
   modalDelete: IModalDelete;
   modalGenerate: IModalGenerate;
+  modalSaveRateio: IModalSaveRateio;
+  modalAuthRateio: IModalAuthRateio;
 }
 
 export interface IModalExpense {
@@ -40,15 +46,27 @@ export interface IModalGenerate {
   isOpen: boolean;
 }
 
+export interface IModalSaveRateio {
+  isOpen: boolean;
+  rateioName: string;
+}
+
+export interface IModalAuthRateio {
+  isOpen: boolean;
+  rateioId: string;
+}
 export interface IModal {
   isOpen: boolean;
 }
+
 const initialState: IModals = {
   modalCreate: { isOpen: false },
   modalAddExpense: { isOpen: false, name: "" },
   modalEdit: { isOpen: false, participant: null },
   modalDelete: { isOpen: false, participant: null },
   modalGenerate: { isOpen: false },
+  modalSaveRateio: { isOpen: false, rateioName: "" },
+  modalAuthRateio: { isOpen: false, rateioId: "" },
 };
 
 export const modalReducer = createReducer(initialState, (builder) => {
@@ -103,5 +121,27 @@ export const modalReducer = createReducer(initialState, (builder) => {
   builder.addCase(setModalGenerateClose, (state) => ({
     ...state,
     modalGenerate: { isOpen: false },
+  }));
+
+  //Save Rateio
+  builder.addCase(setModalSaveRateioOpen, (state, action) => ({
+    ...state,
+    modalSaveRateio: { isOpen: true, rateioName: action.payload },
+  }));
+
+  builder.addCase(setModalSaveRateioClose, (state) => ({
+    ...state,
+    modalSaveRateio: { isOpen: false, rateioName: "" },
+  }));
+
+  //Auth Rateio
+  builder.addCase(setModalAuthRateioOpen, (state, action) => ({
+    ...state,
+    modalAuthRateio: { isOpen: true, rateioId: action.payload },
+  }));
+
+  builder.addCase(setModalAuthRateioClose, (state) => ({
+    ...state,
+    modalAuthRateio: { isOpen: false, rateioId: "" },
   }));
 });

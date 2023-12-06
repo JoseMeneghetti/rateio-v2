@@ -1,4 +1,4 @@
-import { ImageIcon } from "lucide-react";
+import { ImageIcon, UserCircle2Icon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { CardDescription, CardTitle } from "../ui/card";
@@ -9,22 +9,36 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { Label } from "../ui/label";
-import { useAppSelector } from "@/store/hook";
-import { selectFindHowManyPayWithoutDiferences } from "@/store/rateios/rateios.selectors";
+
+import { IParticipants, IwhoPaid } from "@/store/rateios/rateios.reducer";
 
 interface ExpensesListCardContentProps {
   icon: string;
   expense: string;
   value: number;
+  whoPaid: IwhoPaid[];
+  participants: IParticipants[];
 }
 const ExpensesListCardContent = ({
   expense,
   icon,
   value,
+  participants,
+  whoPaid,
 }: ExpensesListCardContentProps) => {
-  const expenses = useAppSelector(selectFindHowManyPayWithoutDiferences);
+  const findExpense = whoPaid.find((el) => el.expense === expense);
 
-  const findExpense = expenses.find((el) => el.expense === expense)
+  const expensePairs = participants
+    .map((participant) => {
+      const expenseItem = participant.expenses.find(
+        (item) => item.expense_name === expense
+      );
+      if (expenseItem) {
+        return { name: participant.name, value: expenseItem.expense_value };
+      }
+      return null; // Retornar null para participantes sem a despesa especificada
+    })
+    .filter((item) => item)[0];
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -60,35 +74,25 @@ const ExpensesListCardContent = ({
             <Label className="text-sm capitalize">{expense} Overview</Label>
 
             <div className="flex flex-col rounded-lg border p-4 gap-4">
-              <Label className="text-sm">Expenses</Label>
-              {findExpense?.names.map((participant, index) => (
-                <div
-                  key={`${participant.name}-${index}`}
-                  className="flex flex-row justify-between items-center px-2"
-                >
-                  <div className="flex items-center justify-start gap-1">
-                    {icon ? (
-                      <Image
-                        src={`/icons/${icon}.png`}
-                        width={25}
-                        height={25}
-                        alt={"icon"}
-                      />
-                    ) : (
-                      <ImageIcon width={25} height={25} />
-                    )}
-                    <p className="capitalize">{exp.expense}</p>
+              <Label className="text-sm">Share</Label>
+              {findExpense?.names.map((participant, index) => {
+                return (
+                  <div
+                    key={`${participant.name}-${index}`}
+                    className="flex flex-row justify-between items-center px-2"
+                  >
+                    <div className="flex items-center justify-start gap-1">
+                      <UserCircle2Icon width={25} height={25} />
+                      <p className="capitalize">{participant.name}</p>
+                    </div>
+                    <p>U$ {participant.value?.toFixed(2)}</p>
                   </div>
-                  <p>U$ {exp.value}</p>
-                </div>
-              ))}
-              <div className="text-sm flex justify-between">
-                <Label>Sum of shares</Label>
-                <Label>U$ {totalExpenses()}</Label>
-              </div>
-              <div className="text-sm flex justify-between">
-                <Label>Total expend</Label>
-                <Label>U$ {totalExpend()}</Label>
+                );
+              })}
+              <Label>Who paid</Label>
+              <div className="text-sm flex justify-between px-2">
+                <Label className="capitalize">{expensePairs?.name}</Label>
+                <Label>U$ {expensePairs?.value?.toFixed(2)}</Label>
               </div>
             </div>
           </div>

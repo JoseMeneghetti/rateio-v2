@@ -32,3 +32,15 @@ export const setModalGenerateOpen = createAction("modal/setModalGenerateOpen");
 export const setModalGenerateClose = createAction(
   "modal/setModalGenerateClose"
 );
+
+//Save Rateio
+export const setModalSaveRateioOpen = createAction<string>("modal/setModalSaveRateioOpen");
+export const setModalSaveRateioClose = createAction(
+  "modal/setModalSaveRateioClose"
+);
+
+//Auth Rateio
+export const setModalAuthRateioOpen = createAction<string>("modal/setModalAuthRateioOpen");
+export const setModalAuthRateioClose = createAction(
+  "modal/setModalAuthRateioClose"
+);

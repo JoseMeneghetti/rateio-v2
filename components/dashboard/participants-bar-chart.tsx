@@ -38,7 +38,7 @@ const ParticipantsBarChart = ({ participants }: ParticipantsBarChartProps) => {
             />
             <Tooltip />
             <ReferenceLine y={0} stroke="#6b6b6b" />
-            <Bar dataKey="value" fill="#81ff47" maxBarSize={41} />
+            <Bar dataKey="value" fill="#A453EE" maxBarSize={41} />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>
