@@ -1,7 +1,7 @@
 import Heading from "@/components/common/heading";
 import { SplitIcon } from "lucide-react";
 
-const DashboardHomePage = () => {
+export default function Page() {
   return (
     <div className="p-4 lg:p-8">
       <Heading
@@ -13,6 +13,4 @@ const DashboardHomePage = () => {
       />
     </div>
   );
-};
-
-export default DashboardHomePage;
+}

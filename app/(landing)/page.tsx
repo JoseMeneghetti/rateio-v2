@@ -4,7 +4,7 @@ import LandingNavbar from "@/components/landing/navbar";
 import LandingHero from "@/components/landing/hero";
 import LandingContent from "@/components/landing/content";
 
-const LandingPage = async () => {
+export default async function Page() {
   const session = await getServerSession(AuthOptions);
 
   return (
@@ -14,6 +14,4 @@ const LandingPage = async () => {
       <LandingContent />
     </div>
   );
-};
-
-export default LandingPage;
+}

@@ -33,8 +33,8 @@ const SuggestionCards = ({
           {receives && receives.length > 0 && (
             <div className="flex-1 space-y-1">
               <CardTitle className="text-base">Receives</CardTitle>
-              {receives.map((receive) => (
-                <div className="flex justify-between px-2">
+              {receives.map((receive,idx) => (
+                <div key={idx} className="flex justify-between px-2">
                   <CardDescription className="capitalize">
                     {receive.receiveFrom}
                   </CardDescription>
@@ -50,8 +50,8 @@ const SuggestionCards = ({
           {pays && pays.length > 0 && (
             <div className="flex-1 space-y-1">
               <CardTitle className="text-base">Pays</CardTitle>
-              {pays.map((pay) => (
-                <div className="flex justify-between px-2">
+              {pays.map((pay, idx) => (
+                <div key={idx} className="flex justify-between px-2">
                   <CardDescription className="capitalize">
                     {pay.pays}
                   </CardDescription>

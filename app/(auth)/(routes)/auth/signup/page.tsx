@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: "Authentication forms built using the components.",
 };
 
-export const AuthenticationPage = () => {
+export default function Page() {
   return (
     <>
       <div className="container relative h-[800px] items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -85,6 +85,4 @@ export const AuthenticationPage = () => {
       </div>
     </>
   );
-};
-
-export default AuthenticationPage
+}

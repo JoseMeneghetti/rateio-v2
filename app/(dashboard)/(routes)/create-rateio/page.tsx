@@ -35,7 +35,7 @@ import {
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 
-const DashboardPage = () => {
+export default function Page() {
   const [nameRateio, setNameRateio] = useState("");
   const debouncedNameRateio = useDebounce<string>(nameRateio, 500);
 
@@ -142,6 +142,4 @@ const DashboardPage = () => {
       <ModalGenerate />
     </div>
   );
-};
-
-export default DashboardPage;
+}

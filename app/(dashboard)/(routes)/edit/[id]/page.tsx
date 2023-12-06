@@ -39,7 +39,7 @@ import {
 } from "@/store/rateios/rateios.selectors";
 import { formSchema } from "../../create-rateio/constants";
 
-const EditPage = ({ params }: { params: { id: string } }) => {
+export default function Page({ params }: { params: { id: string } }) {
   const participants = useAppSelector(selectActiveParticipants);
   const nameRateio = useAppSelector(selectActiveNomeRateio);
 
@@ -147,6 +147,4 @@ const EditPage = ({ params }: { params: { id: string } }) => {
       <ModalGenerate />
     </div>
   );
-};
-
-export default EditPage;
+}

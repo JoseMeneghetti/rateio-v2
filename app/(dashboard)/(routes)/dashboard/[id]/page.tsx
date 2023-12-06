@@ -12,7 +12,7 @@ import { FileWarningIcon, SplitIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const DashboardPage = ({ params }: { params: { id: string } }) => {
+export default function Page({ params }: { params: { id: string } }) {
   const rateio = useAppSelector(selectFetechedRateio);
 
   const dispatch = useAppDispatch();
@@ -72,6 +72,4 @@ const DashboardPage = ({ params }: { params: { id: string } }) => {
       <TabsComponent rateio={rateio} />
     </div>
   );
-};
-
-export default DashboardPage;
+}

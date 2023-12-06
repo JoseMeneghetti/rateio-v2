@@ -12,7 +12,7 @@ import { useAppSelector } from "@/store/hook";
 import { selectActiveRateio } from "@/store/rateios/rateios.selectors";
 import { FileWarningIcon, SplitIcon } from "lucide-react";
 
-const DashboardPage = () => {
+export default function Page() {
   const rateio = useAppSelector(selectActiveRateio);
 
   if (rateio.total?.length < 1) {
@@ -47,6 +47,4 @@ const DashboardPage = () => {
       <ModalSaveRateio />
     </div>
   );
-};
-
-export default DashboardPage;
+}

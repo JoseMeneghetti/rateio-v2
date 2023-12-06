@@ -1,11 +1,11 @@
 "use client";
 
 import { useAppSelector } from "@/store/hook";
-import { RootState } from "@/store/store";
+import { selectActiveNomeRateio } from "@/store/rateios/rateios.selectors";
 import React from "react";
 
 const HeaderTitle = () => {
-  const { nameRateio } = useAppSelector((state: RootState) => state.rateio);
+  const nameRateio = useAppSelector(selectActiveNomeRateio);
   return <h1 className="text-white font-bold text-2xl">{nameRateio}</h1>;
 };
 

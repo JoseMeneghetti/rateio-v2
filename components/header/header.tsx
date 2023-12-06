@@ -17,9 +17,9 @@ const Header = () => {
         </Link>
       </div>
 
-      <div>
+      {/* <div>
         <HeaderTitle />
-      </div>
+      </div> */}
 
       <div className="flex gap-12">
         {/* <Link href={"/#"} className="text-white text-lg">
