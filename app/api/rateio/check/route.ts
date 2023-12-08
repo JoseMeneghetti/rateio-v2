@@ -10,7 +10,7 @@ type RateioWithoutPassword = Omit<Rateio, "password">;
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
   let userId: string | null = null;
-  // Acesso aos parâmetros de consulta
+
   const userIdParam = searchParams.get("userId");
 
   const id = searchParams.get("id");
@@ -39,7 +39,6 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // Buscar o rateio do banco de dados
     const rateio = await prisma.rateio.findUnique({
       where: {
         id,
@@ -54,12 +53,10 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Verificar se o rateio possui senha
     const hasPassword =
       rateio.password !== null && rateio.password !== undefined && rateio.password !== "";
 
     if (hasPassword) {
-      // Se tiver senha, verifica se o usuário está na whitelist
       const userInWhiteList = await prisma.rateioWhiteList.findFirst({
         where: {
           rateio_id: id,

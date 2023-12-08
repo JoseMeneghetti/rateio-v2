@@ -12,9 +12,9 @@ const TabsComponent = ({ rateio }: TabsComponentProps) => {
   return (
     <Tabs defaultValue="expenses" className="w-full">
       <TabsList className="grid w-full grid-cols-3 max-w-[700px] mb-4">
-        <TabsTrigger value="expenses">Expenses Overview</TabsTrigger>
-        <TabsTrigger value="participants">Participants Overview</TabsTrigger>
-        <TabsTrigger value="suggestions">Suggestions</TabsTrigger>
+        <TabsTrigger value="expenses" className="text-xs md:text-base">Expenses Overview</TabsTrigger>
+        <TabsTrigger value="participants" className="text-xs md:text-base">Participants Overview</TabsTrigger>
+        <TabsTrigger value="suggestions" className="text-xs md:text-base">Suggestions</TabsTrigger>
       </TabsList>
       <TabsContent value="expenses">
         <DashboardTabExpense

@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Set config defaults when creating the instance
 export const api = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 // Alter defaults after instance has been created

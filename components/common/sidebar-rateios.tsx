@@ -4,16 +4,18 @@ import { FolderIcon } from "lucide-react";
 import { useAppSelector } from "@/store/hook";
 import { selectFetchedNomeRateio } from "@/store/rateios/rateios.selectors";
 import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Rateio } from "@prisma/client";
 
 interface SidebarRateiosProps {
   rateios: Rateio[];
+  setIsOpen?: (isOpen: boolean) => void;
 }
-const SidebarRateios = ({ rateios }: SidebarRateiosProps) => {
+const SidebarRateios = ({ rateios, setIsOpen }: SidebarRateiosProps) => {
   const nameRateio = useAppSelector(selectFetchedNomeRateio);
   const router = useRouter();
-
+  const pathname = usePathname();
+  
   return (
     <div
       className={cn(
@@ -34,13 +36,14 @@ const SidebarRateios = ({ rateios }: SidebarRateiosProps) => {
                 key={rateio.id}
                 className={cn(
                   "hover:text-white hover:bg-white/10  transition text-zinc-400 w-full cursor-pointer justify-normal pl-8 mb-1 text-left rounded-lg text-xs",
-                  rateio.nameRateio === nameRateio &&
+                  rateio.nameRateio === nameRateio && pathname.includes("dashboard/") &&
                     "bg-white/10 text-whitetext-white"
                 )}
                 variant="ghost"
                 onClick={(e) => {
                   e.preventDefault();
                   router.push(`/dashboard/${rateio.id}`);
+                  setIsOpen && setIsOpen(false);
                 }}
               >
                 {rateio?.nameRateio}

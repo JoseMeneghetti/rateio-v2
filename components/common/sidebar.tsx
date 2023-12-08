@@ -10,8 +10,9 @@ import { Rateio } from "@prisma/client";
 
 interface SideBarProps {
   rateios: Rateio[];
+  setIsOpen?: (isOpen: boolean) => void;
 }
-const Sidebar = ({ rateios }: SideBarProps) => {
+const Sidebar = ({ rateios, setIsOpen }: SideBarProps) => {
   const routes = [
     {
       label: "DashBoard",
@@ -35,6 +36,9 @@ const Sidebar = ({ rateios }: SideBarProps) => {
         <div className="space-y-1">
           {routes.map((route) => (
             <Link
+              onClick={() => {
+                setIsOpen && setIsOpen(false);
+              }}
               href={route.href}
               key={route.href}
               className={cn(
@@ -50,7 +54,7 @@ const Sidebar = ({ rateios }: SideBarProps) => {
               </div>
             </Link>
           ))}
-          <SidebarRateios rateios={rateios} />
+          <SidebarRateios rateios={rateios} setIsOpen={setIsOpen} />
         </div>
       </div>
     </div>
