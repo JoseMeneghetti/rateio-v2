@@ -15,10 +15,10 @@ interface DashboardLayoutProps {
 const getData = async (id: string): Promise<Rateio[]> => {
   try {
     const response = await getRateios(id);
-    return response.data;
+    return response?.data;
   } catch (error: any) {
     console.error
-    throw new Error(error.response.data.message);
+    throw new Error(error.response?.data.message);
   }
 };
 
