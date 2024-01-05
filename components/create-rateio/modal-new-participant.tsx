@@ -29,13 +29,24 @@ import { Switch } from "../ui/switch";
 import { useState } from "react";
 import PopoverIcons from "../common/popover-icons";
 import Image from "next/image";
-import { setRateioParticipants } from "@/store/rateios/rateios.actions";
+import {
+  setRateioParticipants,
+  setEditRateioParticipants,
+} from "@/store/rateios/rateios.actions";
 
-const ModalNewParticipant = () => {
+interface ModalNewParticipantProps {
+  edit: boolean;
+}
+
+const ModalNewParticipant = ({ edit }: ModalNewParticipantProps) => {
   const [enableExpenses, setEnableExpenses] = useState(false);
   const [icon, setIcon] = useState<string>("");
   const { modalCreate } = useAppSelector((state: RootState) => state.modal);
   const dispatch = useAppDispatch();
+
+  const setParticipants = edit
+    ? setEditRateioParticipants
+    : setRateioParticipants;
 
   const onClose = () => {
     dispatch(setModalCreateClose());
@@ -57,14 +68,14 @@ const ModalNewParticipant = () => {
     try {
       if (!Number(values.expense_value)) {
         dispatch(
-          setRateioParticipants({
+          setParticipants({
             name: values.name ?? "",
             expenses: [],
           })
         );
       } else {
         dispatch(
-          setRateioParticipants({
+          setParticipants({
             name: values.name ?? "",
             expenses: [
               {

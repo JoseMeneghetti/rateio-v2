@@ -29,7 +29,6 @@ import ModalEditParticipant from "@/components/create-rateio/modal-edit-particip
 import ModalDeleteParticipant from "@/components/create-rateio/modal-delete-expense";
 import ModalGenerate from "@/components/create-rateio/modal-generate";
 import {
-  selectActiveNomeRateio,
   selectActiveParticipants,
 } from "@/store/rateios/rateios.selectors";
 import { useEffect, useState } from "react";
@@ -61,7 +60,7 @@ export default function Page() {
   }, [debouncedNameRateio]);
 
   return (
-    <div className="px-4 lg:px-8">
+    <div className="p-4 lg:px-8">
       <Heading
         title="Create a new Rateio"
         description="Create your rateio, name it, add all people that will participate and add their expences."

@@ -46,3 +46,29 @@ export const fetchRateio = createAsyncThunk(
     return data;
   }
 );
+
+export const setClearActiveRateio = createAction("rateio/setClearActiveRateio");
+
+export const setClearFetchRateio = createAction("rateio/setClearFetchRateio");
+
+export const setClearEditRateio = createAction("rateio/setClearEditRateio");
+
+export const setEditRateioName = createAction<string>("rateio/setEditRateioName");
+
+export const setEditRateioParticipants = createAction<IParticipants>(
+  "rateio/setEditRateioParticipants"
+);
+
+export const setEditNewExpense = createAction<IParticipantsPayload>(
+  "rateio/setEditNewExpense"
+);
+
+export const setEditEditExpense = createAction<IEditParticipantsPayload>(
+  "rateio/setEditEditExpense"
+);
+
+export const setEditDeleteExpense = createAction<IDeleteParticipantsPayload>(
+  "rateio/setEditDeleteExpense"
+);
+
+export const setEditRateio = createAction<IRateio>("rateio/setEditRateio");

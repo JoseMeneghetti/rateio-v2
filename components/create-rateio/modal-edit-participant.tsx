@@ -25,14 +25,23 @@ import { Label } from "../ui/label";
 import { useEffect, useState } from "react";
 import PopoverIcons from "../common/popover-icons";
 import Image from "next/image";
-import { setEditExpense } from "@/store/rateios/rateios.actions";
+import {
+  setEditExpense,
+  setEditEditExpense,
+} from "@/store/rateios/rateios.actions";
 
-const ModalEditParticipant = () => {
+interface ModalEditParticipantProps {
+  edit: boolean;
+}
+
+const ModalEditParticipant = ({ edit }: ModalEditParticipantProps) => {
   const { modalEdit } = useAppSelector((state: RootState) => state.modal);
 
   const [icon, setIcon] = useState<string>(
     () => modalEdit.participant?.expense?.icon ?? ""
   );
+
+  const setExpense = edit ? setEditEditExpense  : setEditExpense;
 
   const dispatch = useAppDispatch();
 
@@ -51,7 +60,7 @@ const ModalEditParticipant = () => {
   const onSubmit = (values: z.infer<typeof expensesSchema>) => {
     try {
       dispatch(
-        setEditExpense({
+        setExpense({
           name: modalEdit.participant?.name ?? "",
           original_expense: modalEdit.participant?.expense.expense_name ?? "",
           expense: {

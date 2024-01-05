@@ -8,6 +8,15 @@ import {
   setRateioName,
   setRateioParticipants,
   setResetActiveRateio,
+  setClearActiveRateio,
+  setClearFetchRateio,
+  setEditRateioName,
+  setEditRateioParticipants,
+  setEditNewExpense,
+  setEditEditExpense,
+  setEditDeleteExpense,
+  setClearEditRateio,
+  setEditRateio,
 } from "./rateios.actions";
 
 export interface IExpenses {
@@ -38,6 +47,7 @@ export interface IFetchedRateio extends IRateio {
 export interface IRateios {
   activeRateio: IRateio;
   fetchedRateio: IFetchedRateio;
+  editRateio: IRateio;
 }
 
 export interface IwhoPaid {
@@ -87,10 +97,20 @@ const initialState: IRateios = {
     id: "",
     whiteListPermission: false,
   },
+  editRateio: {
+    participants: [],
+    nameRateio: "",
+    whoPaid: [],
+    listForResult: [],
+    onlyParticipants: [],
+    sumOfPaids: [],
+    total: [],
+    suggestion: [],
+  },
 };
 
 export const rateioReducer = createReducer(initialState, (builder) => {
-  //name rateio
+  //ACTIVE RATEIO
   builder.addCase(setRateioName, (state, action) => ({
     ...state,
     activeRateio: {
@@ -98,7 +118,7 @@ export const rateioReducer = createReducer(initialState, (builder) => {
       nameRateio: action.payload,
     },
   }));
-  //participants
+
   builder.addCase(setRateioParticipants, (state, action) => {
     const { expenses, name } = action.payload;
 
@@ -266,7 +286,20 @@ export const rateioReducer = createReducer(initialState, (builder) => {
     };
   });
 
-  //expenses share
+  builder.addCase(setClearActiveRateio, (state) => ({
+    ...state,
+    activeRateio: {
+      participants: [],
+      nameRateio: "",
+      whoPaid: [],
+      listForResult: [],
+      onlyParticipants: [],
+      sumOfPaids: [],
+      total: [],
+      suggestion: [],
+    },
+  }));
+
   builder.addCase(setActiveRateio, (state, action) => ({
     ...state,
     activeRateio: action.payload,
@@ -284,6 +317,201 @@ export const rateioReducer = createReducer(initialState, (builder) => {
       total: [],
       suggestion: [],
     },
+  }));
+
+  //EDIT RATEIO
+  builder.addCase(setEditRateioName, (state, action) => ({
+    ...state,
+    editRateio: {
+      ...state.editRateio,
+      nameRateio: action.payload,
+    },
+  }));
+
+  builder.addCase(setEditRateioParticipants, (state, action) => {
+    const { expenses, name } = action.payload;
+
+    const existingParticipant = state.editRateio.participants.find(
+      (participant) => participant.name === name
+    );
+
+    if (existingParticipant) {
+      return {
+        ...state,
+        editRateio: {
+          ...state.editRateio,
+          participants: state.editRateio.participants.map((participant) => {
+            if (participant.name === action.payload.name) {
+              if (
+                participant?.expenses[0]?.expense_name ===
+                expenses[0]?.expense_name
+              ) {
+                const newValue =
+                  expenses[0].expense_value +
+                  participant.expenses[0].expense_value;
+
+                const oldExpenses = participant.expenses.filter(
+                  (expense) =>
+                    expense.expense_name !== expenses[0]?.expense_name
+                );
+
+                return {
+                  ...participant,
+                  expenses: [
+                    ...oldExpenses,
+                    {
+                      expense_name: expenses[0].expense_name,
+                      expense_value: newValue,
+                      icon: expenses[0].icon,
+                    },
+                  ],
+                };
+              } else {
+                return {
+                  ...participant,
+                  expenses: [...expenses],
+                };
+              }
+            }
+            return participant;
+          }),
+        },
+      };
+    }
+
+    return {
+      ...state,
+      editRateio: {
+        ...state.editRateio,
+        participants: [...state.editRateio.participants, action.payload],
+      },
+    };
+  });
+
+  builder.addCase(setEditNewExpense, (state, action) => {
+    const { name, expense } = action.payload;
+
+    const updatedParticipants = state.editRateio.participants.map(
+      (participant) => {
+        if (participant.name === name) {
+          if (
+            participant?.expenses[0]?.expense_name === expense?.expense_name
+          ) {
+            const newValue =
+              expense.expense_value + participant.expenses[0]?.expense_value;
+
+            const oldExpenses = participant.expenses.filter(
+              (expenseItem) =>
+                expenseItem.expense_name !== expense?.expense_name
+            );
+
+            return {
+              ...state,
+              editRateio: {
+                ...state.editRateio,
+                participants: {
+                  ...state.editRateio.participants,
+                  expenses: [
+                    ...oldExpenses,
+                    {
+                      expense_name: expense.expense_name,
+                      expense_value: newValue,
+                      icon: expense.icon,
+                    },
+                  ],
+                },
+              },
+            };
+          } else {
+            return {
+              ...state,
+              editRateio: {
+                ...state.editRateio,
+                participants: {
+                  ...state.editRateio.participants,
+                  expenses: [...participant.expenses, expense],
+                },
+              },
+            };
+          }
+        }
+        return participant;
+      }
+    );
+
+    return {
+      ...state,
+      participants: updatedParticipants,
+    };
+  });
+
+  builder.addCase(setEditEditExpense, (state, action) => {
+    const { name, expense, original_expense } = action.payload;
+
+    const updatedParticipants = state.editRateio.participants.map(
+      (participant) => {
+        if (participant.name === name) {
+          const filtered = participant.expenses.filter(
+            (el) => original_expense !== el.expense_name
+          );
+
+          return { ...participant, expenses: [...filtered, expense] };
+        }
+        return participant;
+      }
+    );
+
+    return {
+      ...state,
+      editRateio: {
+        ...state.editRateio,
+        participants: updatedParticipants,
+      },
+    };
+  });
+
+  builder.addCase(setEditDeleteExpense, (state, action) => {
+    const { name, original_expense } = action.payload;
+
+    const updatedParticipants = state.editRateio.participants.map(
+      (participant) => {
+        if (participant.name === name) {
+          const filtered = participant.expenses.filter(
+            (el) => original_expense !== el.expense_name
+          );
+
+          return { ...participant, expenses: [...filtered] };
+        }
+        return participant;
+      }
+    );
+
+    return {
+      ...state,
+      editRateio: {
+        ...state.editRateio,
+        participants: updatedParticipants,
+      },
+    };
+  });
+
+  builder.addCase(setClearEditRateio, (state) => ({
+    ...state,
+    editRateio: {
+      participants: [],
+      nameRateio: "",
+      whoPaid: [],
+      listForResult: [],
+      onlyParticipants: [],
+      sumOfPaids: [],
+      total: [],
+      suggestion: [],
+    },
+  }));
+
+  builder.addCase(setEditRateio, (state, action) => ({
+    ...state,
+    editRateio: action.payload,
   }));
 
   //fetch rateio
@@ -332,6 +560,22 @@ export const rateioReducer = createReducer(initialState, (builder) => {
       total: JSON.parse(action.payload.total),
       whoPaid: JSON.parse(action.payload.whoPaid),
       participants: JSON.parse(action.payload.participants),
+    },
+  }));
+
+  builder.addCase(setClearFetchRateio, (state) => ({
+    ...state,
+    fetchedRateio: {
+      participants: [],
+      nameRateio: "",
+      whoPaid: [],
+      listForResult: [],
+      onlyParticipants: [],
+      sumOfPaids: [],
+      total: [],
+      suggestion: [],
+      id: "",
+      whiteListPermission: false,
     },
   }));
 });

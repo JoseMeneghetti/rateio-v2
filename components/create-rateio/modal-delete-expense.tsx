@@ -11,9 +11,16 @@ import { AlertTriangleIcon, ImageIcon } from "lucide-react";
 import { Label } from "../ui/label";
 
 import Image from "next/image";
-import { setDeleteExpense } from "@/store/rateios/rateios.actions";
+import {
+  setDeleteExpense,
+  setEditDeleteExpense,
+} from "@/store/rateios/rateios.actions";
 
-const ModalDeleteParticipant = () => {
+interface ModalDeleteParticipantProps {
+  edit: boolean;
+}
+
+const ModalDeleteParticipant = ({ edit }: ModalDeleteParticipantProps) => {
   const { modalDelete } = useAppSelector((state: RootState) => state.modal);
 
   const dispatch = useAppDispatch();
@@ -22,10 +29,12 @@ const ModalDeleteParticipant = () => {
     dispatch(setModalDeleteClose());
   };
 
+  const setDelete = edit ? setEditDeleteExpense : setDeleteExpense;
+
   const onSubmit = () => {
     try {
       dispatch(
-        setDeleteExpense({
+        setDelete({
           name: modalDelete?.participant?.name ?? "",
           original_expense:
             modalDelete?.participant?.expense?.expense_name ?? "",

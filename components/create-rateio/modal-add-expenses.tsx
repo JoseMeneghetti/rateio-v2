@@ -23,12 +23,21 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import { ImageIcon, PlusCircleIcon } from "lucide-react";
 import PopoverIcons from "../common/popover-icons";
-import { setNewExpense } from "@/store/rateios/rateios.actions";
+import {
+  setNewExpense,
+  setEditNewExpense,
+} from "@/store/rateios/rateios.actions";
 
-const ModalAddExpenses = () => {
+interface ModalAddExpensesProps {
+  edit: boolean;
+}
+
+const ModalAddExpenses = ({ edit }: ModalAddExpensesProps) => {
   const [icon, setIcon] = useState<string>("");
   const dispatch = useAppDispatch();
   const { modalAddExpense } = useAppSelector((state: RootState) => state.modal);
+
+  const setExpense = edit ? setEditNewExpense  : setNewExpense;
 
   const onClose = () => {
     dispatch(setModalAddExpenseClose());
@@ -46,7 +55,7 @@ const ModalAddExpenses = () => {
   const onSubmit = (values: z.infer<typeof expensesSchema>) => {
     try {
       dispatch(
-        setNewExpense({
+        setExpense({
           name: modalAddExpense.name,
           expense: {
             expense_name: values.expense_name ?? "",

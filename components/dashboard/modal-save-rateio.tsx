@@ -29,7 +29,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Switch } from "../ui/switch";
 import { useState } from "react";
-import { setActiveRateio } from "@/store/rateios/rateios.actions";
+import { setActiveRateio, setClearActiveRateio } from "@/store/rateios/rateios.actions";
 
 const ModalSaveRateio = () => {
   const dispatch = useAppDispatch();
@@ -62,16 +62,7 @@ const ModalSaveRateio = () => {
           whiteListAccess
         );
         dispatch(
-          setActiveRateio({
-            participants: [],
-            nameRateio: "",
-            whoPaid: [],
-            listForResult: [],
-            onlyParticipants: [],
-            sumOfPaids: [],
-            total: [],
-            suggestion: [],
-          })
+          setClearActiveRateio()
         );
         router.push(`/dashboard/${save.data.id}`);
         router.refresh();

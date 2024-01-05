@@ -14,34 +14,30 @@ import { PlusCircleIcon, SplitIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import {
   setModalCreateOpen,
   setModalGenerateOpen,
 } from "@/store/modal/modal.actions";
 import ModalNewParticipant from "@/components/create-rateio/modal-new-participant";
-import {
-  setActiveRateio,
-  setRateioName,
-} from "@/store/rateios/rateios.actions";
+import { setEditRateio, setRateioName } from "@/store/rateios/rateios.actions";
 import { IParticipants } from "@/store/rateios/rateios.reducer";
 import { CardParticipant } from "@/components/create-rateio/card-participant";
 import ModalAddExpenses from "@/components/create-rateio/modal-add-expenses";
 import ModalEditParticipant from "@/components/create-rateio/modal-edit-participant";
 import ModalDeleteParticipant from "@/components/create-rateio/modal-delete-expense";
 import ModalGenerate from "@/components/create-rateio/modal-generate";
-import { useDebounce } from "@/hooks/use-debounce";
 import {
-  selectActiveNomeRateio,
-  selectActiveParticipants,
+  selectEditNomeRateio,
+  selectEditParticipants,
   selectFetechedRateio,
 } from "@/store/rateios/rateios.selectors";
 import { formSchema } from "../../create-rateio/constants";
 
 export default function Page({ params }: { params: { id: string } }) {
-  const participants = useAppSelector(selectActiveParticipants);
-  const nameRateio = useAppSelector(selectActiveNomeRateio);
+  const participants = useAppSelector(selectEditParticipants);
+  const nameRateio = useAppSelector(selectEditNomeRateio);
 
   const fetchedRateio = useAppSelector(selectFetechedRateio);
 
@@ -57,7 +53,7 @@ export default function Page({ params }: { params: { id: string } }) {
   useEffect(() => {
     if (params.id === fetchedRateio.id) {
       try {
-        dispatch(setActiveRateio(fetchedRateio));
+        dispatch(setEditRateio(fetchedRateio));
       } catch (error) {
         console.log(error);
       }
@@ -140,11 +136,11 @@ export default function Page({ params }: { params: { id: string } }) {
         </div>
       </div>
 
-      <ModalNewParticipant />
-      <ModalAddExpenses />
-      <ModalEditParticipant />
-      <ModalDeleteParticipant />
-      <ModalGenerate />
+      <ModalNewParticipant edit />
+      <ModalAddExpenses edit />
+      <ModalEditParticipant edit />
+      <ModalDeleteParticipant edit />
+      <ModalGenerate edit />
     </div>
   );
 }

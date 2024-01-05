@@ -1,6 +1,7 @@
 import Link from "next/link";
 import HeaderTitle from "./header-title";
 import LogoComponent from "./logo";
+import { SettingsIcon } from "lucide-react";
 
 const Header = () => {
   return (
@@ -14,10 +15,13 @@ const Header = () => {
       <div className="flex gap-12">
         {/* <Link href={"/#"} className="text-white text-lg">
           Procurar
-        </Link>
-        <Link href={"/#"} className="text-white text-lg">
-          Limpar
         </Link> */}
+        <Link
+          href={"/account/my-account"}
+          className="text-white text-lg flex gap-x-2"
+        >
+          <SettingsIcon size={30}/>
+        </Link>
       </div>
     </div>
   );

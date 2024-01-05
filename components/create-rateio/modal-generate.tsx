@@ -25,12 +25,16 @@ import { ISuggestionItem } from "@/store/rateios/rateios.reducer";
 import {
   selectActiveNomeRateio,
   selectActiveParticipants,
+  selectEditNomeRateio,
+  selectEditParticipants,
 } from "@/store/rateios/rateios.selectors";
 import { selectModalGenerate } from "@/store/modal/modal.selectors";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   setActiveRateio,
+  setEditRateio,
   setResetActiveRateio,
+  setClearEditRateio,
 } from "@/store/rateios/rateios.actions";
 import { rateioEdit } from "@/service/rateio/rateio-service";
 import { toast } from "../ui/use-toast";
@@ -60,10 +64,18 @@ export interface IExpensesShare {
   names: { name: string; checked: boolean }[];
 }
 
-const ModalGenerate = () => {
+interface ModalGenerateProps {
+  edit: boolean;
+}
+
+const ModalGenerate = ({ edit }: ModalGenerateProps) => {
   const modalGenerate = useAppSelector(selectModalGenerate);
-  const participants = useAppSelector(selectActiveParticipants);
-  const nameRateio = useAppSelector(selectActiveNomeRateio);
+  const participants = edit
+    ? useAppSelector(selectEditParticipants)
+    : useAppSelector(selectActiveParticipants);
+  const nameRateio = edit
+    ? useAppSelector(selectEditNomeRateio)
+    : useAppSelector(selectActiveNomeRateio);
 
   const [controlDivision, setControlDivision] = useState<IExpensesShare[]>();
 
@@ -74,6 +86,9 @@ const ModalGenerate = () => {
   const onClose = () => {
     dispatch(setModalGenerateClose());
   };
+
+  const setActive = edit ? setEditRateio : setActiveRateio;
+  const setReset = edit ? setClearEditRateio : setResetActiveRateio;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -270,7 +285,7 @@ const ModalGenerate = () => {
             try {
               const saved = await rateioEdit(newRateio, params.id);
               router.refresh();
-              dispatch(setResetActiveRateio());
+              dispatch(setReset());
               toast({
                 title: "Success!",
                 description: "Your rateio has been edited successefully",
@@ -285,7 +300,7 @@ const ModalGenerate = () => {
               });
             }
           } else {
-            dispatch(setActiveRateio(newRateio));
+            dispatch(setActive(newRateio));
             router.push("/dashboard");
           }
         }

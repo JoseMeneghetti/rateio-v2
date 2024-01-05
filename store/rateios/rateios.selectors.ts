@@ -6,18 +6,23 @@ export const selectActiveRateio = (state: RootState) =>
   state.rateio.activeRateio;
 export const selectFetechedRateio = (state: RootState) =>
   state.rateio.fetchedRateio;
+export const selectEditRateio = (state: RootState) => state.rateio.editRateio;
 
 //participants
-export const sselectFetchedParticipants = (state: RootState) =>
+export const selectFetchedParticipants = (state: RootState) =>
   state.rateio.fetchedRateio.participants;
 export const selectActiveParticipants = (state: RootState) =>
   state.rateio.activeRateio.participants;
+export const selectEditParticipants = (state: RootState) =>
+  state.rateio.editRateio.participants;
 
 //Name rateio
 export const selectFetchedNomeRateio = (state: RootState) =>
   state.rateio.fetchedRateio.nameRateio;
 export const selectActiveNomeRateio = (state: RootState) =>
   state.rateio.activeRateio.nameRateio;
+export const selectEditNomeRateio = (state: RootState) =>
+  state.rateio.editRateio.nameRateio;
 
 //ID
 export const selectRateioId = (state: RootState) =>
