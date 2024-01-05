@@ -2,12 +2,7 @@ import { ImageIcon, UserCircle2Icon } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { CardDescription, CardTitle } from "../ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
+
 import { Label } from "../ui/label";
 
 import { IParticipants, IwhoPaid } from "@/store/rateios/rateios.reducer";
@@ -27,16 +22,21 @@ const ExpensesListCardContent = ({
   participants,
   whoPaid,
 }: ExpensesListCardContentProps) => {
-  const findExpense = whoPaid.find((el) => el.expense === expense);
+  const findExpense = whoPaid.find(
+    (el) => el.expense === expense && el.value === value
+  );
+
   const [isOpen, setIsOpen] = useState(false);
 
   const expensePairs = participants
     .map((participant) => {
-      const expenseItem = participant.expenses.find(
+      const expenseItem = participant.expenses.filter(
         (item) => item.expense_name === expense
       );
-      if (expenseItem) {
-        return { name: participant.name, value: expenseItem.expense_value };
+      const findExpItem = expenseItem.find((el) => el.expense_value === value);
+
+      if (findExpItem) {
+        return { name: participant.name, value: findExpItem.expense_value };
       }
       return null; // Retornar null para participantes sem a despesa especificada
     })

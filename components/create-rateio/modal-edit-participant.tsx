@@ -29,6 +29,7 @@ import {
   setEditExpense,
   setEditEditExpense,
 } from "@/store/rateios/rateios.actions";
+import { useToast } from "../ui/use-toast";
 
 interface ModalEditParticipantProps {
   edit?: boolean;
@@ -41,9 +42,11 @@ const ModalEditParticipant = ({ edit }: ModalEditParticipantProps) => {
     () => modalEdit.participant?.expense?.icon ?? ""
   );
 
-  const setExpense = edit ? setEditEditExpense  : setEditExpense;
+  const setExpense = edit ? setEditEditExpense : setEditExpense;
 
   const dispatch = useAppDispatch();
+
+  const { toast } = useToast();
 
   const onClose = () => {
     dispatch(setModalEditClose());
@@ -70,7 +73,16 @@ const ModalEditParticipant = ({ edit }: ModalEditParticipantProps) => {
           },
         })
       );
+      toast({
+        title: "Success!",
+        description: "expense edited successfully!",
+      });
     } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error!",
+        description: "an error happened trying edit the expense!",
+      });
       console.error(error);
     } finally {
       form.reset();

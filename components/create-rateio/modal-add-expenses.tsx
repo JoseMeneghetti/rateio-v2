@@ -27,6 +27,7 @@ import {
   setNewExpense,
   setEditNewExpense,
 } from "@/store/rateios/rateios.actions";
+import { useToast } from "../ui/use-toast";
 
 interface ModalAddExpensesProps {
   edit?: boolean;
@@ -36,6 +37,7 @@ const ModalAddExpenses = ({ edit }: ModalAddExpensesProps) => {
   const [icon, setIcon] = useState<string>("");
   const dispatch = useAppDispatch();
   const { modalAddExpense } = useAppSelector((state: RootState) => state.modal);
+  const { toast } = useToast();
 
   const setExpense = edit ? setEditNewExpense  : setNewExpense;
 
@@ -64,7 +66,16 @@ const ModalAddExpenses = ({ edit }: ModalAddExpensesProps) => {
           },
         })
       );
+      toast({
+        title: "Success!",
+        description: "expense added successfully!",
+      });
     } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error!",
+        description: "an error happened trying to add a new expense!",
+      });
       console.error(error);
     } finally {
       form.reset();

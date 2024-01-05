@@ -15,6 +15,7 @@ import {
   setDeleteExpense,
   setEditDeleteExpense,
 } from "@/store/rateios/rateios.actions";
+import { useToast } from "../ui/use-toast";
 
 interface ModalDeleteParticipantProps {
   edit?: boolean;
@@ -24,6 +25,8 @@ const ModalDeleteParticipant = ({ edit }: ModalDeleteParticipantProps) => {
   const { modalDelete } = useAppSelector((state: RootState) => state.modal);
 
   const dispatch = useAppDispatch();
+
+  const { toast } = useToast();
 
   const onClose = () => {
     dispatch(setModalDeleteClose());
@@ -40,7 +43,16 @@ const ModalDeleteParticipant = ({ edit }: ModalDeleteParticipantProps) => {
             modalDelete?.participant?.expense?.expense_name ?? "",
         })
       );
+      toast({
+        title: "Success!",
+        description: "expense deleted successfully!",
+      });
     } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error!",
+        description: "an error happened trying to delete the expense!",
+      });
       console.error(error);
     } finally {
       onClose();

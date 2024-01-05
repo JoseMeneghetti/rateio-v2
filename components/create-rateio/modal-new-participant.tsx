@@ -33,6 +33,7 @@ import {
   setRateioParticipants,
   setEditRateioParticipants,
 } from "@/store/rateios/rateios.actions";
+import { useToast } from "../ui/use-toast";
 
 interface ModalNewParticipantProps {
   edit?: boolean;
@@ -43,6 +44,7 @@ const ModalNewParticipant = ({ edit }: ModalNewParticipantProps) => {
   const [icon, setIcon] = useState<string>("");
   const { modalCreate } = useAppSelector((state: RootState) => state.modal);
   const dispatch = useAppDispatch();
+  const { toast } = useToast();
 
   const setParticipants = edit
     ? setEditRateioParticipants
@@ -87,7 +89,16 @@ const ModalNewParticipant = ({ edit }: ModalNewParticipantProps) => {
           })
         );
       }
+      toast({
+        title: "Success!",
+        description: "participant added successfully!",
+      });
     } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error!",
+        description: "an error happened trying to add a new participant!",
+      });
       console.error(error);
     } finally {
       form.reset();

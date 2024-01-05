@@ -185,44 +185,32 @@ export const rateioReducer = createReducer(initialState, (builder) => {
     const updatedParticipants = state.activeRateio.participants.map(
       (participant) => {
         if (participant.name === name) {
-          if (
-            participant?.expenses[0]?.expense_name === expense?.expense_name
-          ) {
-            const newValue =
-              expense.expense_value + participant.expenses[0]?.expense_value;
+          const existingExpenseIndex = participant.expenses.findIndex(
+            (expenseItem) => expenseItem.expense_name === expense.expense_name
+          );
 
-            const oldExpenses = participant.expenses.filter(
-              (expenseItem) =>
-                expenseItem.expense_name !== expense?.expense_name
+          if (existingExpenseIndex !== -1) {
+            const updatedExpenses = participant.expenses.map(
+              (expenseItem, index) => {
+                if (index === existingExpenseIndex) {
+                  return {
+                    ...expenseItem,
+                    expense_value:
+                      expenseItem.expense_value + expense.expense_value,
+                  };
+                }
+                return expenseItem;
+              }
             );
 
             return {
-              ...state,
-              activeRateio: {
-                ...state.activeRateio,
-                participants: {
-                  ...state.activeRateio.participants,
-                  expenses: [
-                    ...oldExpenses,
-                    {
-                      expense_name: expense.expense_name,
-                      expense_value: newValue,
-                      icon: expense.icon,
-                    },
-                  ],
-                },
-              },
+              ...participant,
+              expenses: updatedExpenses,
             };
           } else {
             return {
-              ...state,
-              activeRateio: {
-                ...state.activeRateio,
-                participants: {
-                  ...state.activeRateio.participants,
-                  expenses: [...participant.expenses, expense],
-                },
-              },
+              ...participant,
+              expenses: [...participant.expenses, expense],
             };
           }
         }
@@ -230,9 +218,14 @@ export const rateioReducer = createReducer(initialState, (builder) => {
       }
     );
 
+    const updatedActiveRateio = {
+      ...state.activeRateio,
+      participants: updatedParticipants,
+    };
+
     return {
       ...state,
-      participants: updatedParticipants,
+      activeRateio: updatedActiveRateio,
     };
   });
 
@@ -394,44 +387,32 @@ export const rateioReducer = createReducer(initialState, (builder) => {
     const updatedParticipants = state.editRateio.participants.map(
       (participant) => {
         if (participant.name === name) {
-          if (
-            participant?.expenses[0]?.expense_name === expense?.expense_name
-          ) {
-            const newValue =
-              expense.expense_value + participant.expenses[0]?.expense_value;
+          const existingExpenseIndex = participant.expenses.findIndex(
+            (expenseItem) => expenseItem.expense_name === expense.expense_name
+          );
 
-            const oldExpenses = participant.expenses.filter(
-              (expenseItem) =>
-                expenseItem.expense_name !== expense?.expense_name
+          if (existingExpenseIndex !== -1) {
+            const updatedExpenses = participant.expenses.map(
+              (expenseItem, index) => {
+                if (index === existingExpenseIndex) {
+                  return {
+                    ...expenseItem,
+                    expense_value:
+                      expenseItem.expense_value + expense.expense_value,
+                  };
+                }
+                return expenseItem;
+              }
             );
 
             return {
-              ...state,
-              editRateio: {
-                ...state.editRateio,
-                participants: {
-                  ...state.editRateio.participants,
-                  expenses: [
-                    ...oldExpenses,
-                    {
-                      expense_name: expense.expense_name,
-                      expense_value: newValue,
-                      icon: expense.icon,
-                    },
-                  ],
-                },
-              },
+              ...participant,
+              expenses: updatedExpenses,
             };
           } else {
             return {
-              ...state,
-              editRateio: {
-                ...state.editRateio,
-                participants: {
-                  ...state.editRateio.participants,
-                  expenses: [...participant.expenses, expense],
-                },
-              },
+              ...participant,
+              expenses: [...participant.expenses, expense],
             };
           }
         }
@@ -439,9 +420,14 @@ export const rateioReducer = createReducer(initialState, (builder) => {
       }
     );
 
+    const updatedActiveRateio = {
+      ...state.editRateio,
+      participants: updatedParticipants,
+    };
+
     return {
       ...state,
-      participants: updatedParticipants,
+      editRateio: updatedActiveRateio,
     };
   });
 

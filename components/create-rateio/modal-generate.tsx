@@ -37,7 +37,7 @@ import {
   setClearEditRateio,
 } from "@/store/rateios/rateios.actions";
 import { rateioEdit } from "@/service/rateio/rateio-service";
-import { toast } from "../ui/use-toast";
+import { toast, useToast } from "../ui/use-toast";
 
 const formSchema = z.object({
   expenses: z.array(
@@ -81,6 +81,7 @@ const ModalGenerate = ({ edit }: ModalGenerateProps) => {
   const nameRateio = edit ? editNomeRateio : activeNomeRateio;
 
   const [controlDivision, setControlDivision] = useState<IExpensesShare[]>();
+  const { toast } = useToast();
 
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -291,7 +292,7 @@ const ModalGenerate = ({ edit }: ModalGenerateProps) => {
               dispatch(setReset());
               toast({
                 title: "Success!",
-                description: "Your rateio has been edited successefully",
+                description: "Your rateio has been create successefully",
               });
               router.push(`/dashboard/${saved.data.id}`);
             } catch {
@@ -299,7 +300,7 @@ const ModalGenerate = ({ edit }: ModalGenerateProps) => {
                 variant: "destructive",
                 title: "Error!",
                 description:
-                  "An error happened trying to edit your rateio. Please enter in contact.",
+                  "An error happened trying to create your rateio. Please enter in contact.",
               });
             }
           } else {
