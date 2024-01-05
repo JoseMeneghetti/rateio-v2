@@ -65,17 +65,20 @@ export interface IExpensesShare {
 }
 
 interface ModalGenerateProps {
-  edit: boolean;
+  edit?: boolean;
 }
 
 const ModalGenerate = ({ edit }: ModalGenerateProps) => {
   const modalGenerate = useAppSelector(selectModalGenerate);
-  const participants = edit
-    ? useAppSelector(selectEditParticipants)
-    : useAppSelector(selectActiveParticipants);
-  const nameRateio = edit
-    ? useAppSelector(selectEditNomeRateio)
-    : useAppSelector(selectActiveNomeRateio);
+
+  const editParticipants = useAppSelector(selectEditParticipants);
+  const activeParticipants = useAppSelector(selectActiveParticipants);
+  const editNomeRateio = useAppSelector(selectEditNomeRateio);
+  const activeNomeRateio = useAppSelector(selectActiveNomeRateio);
+
+  const participants = edit ? editParticipants : activeParticipants;
+
+  const nameRateio = edit ? editNomeRateio : activeNomeRateio;
 
   const [controlDivision, setControlDivision] = useState<IExpensesShare[]>();
 

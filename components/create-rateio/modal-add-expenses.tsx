@@ -29,7 +29,7 @@ import {
 } from "@/store/rateios/rateios.actions";
 
 interface ModalAddExpensesProps {
-  edit: boolean;
+  edit?: boolean;
 }
 
 const ModalAddExpenses = ({ edit }: ModalAddExpensesProps) => {

@@ -31,7 +31,7 @@ import {
 } from "@/store/rateios/rateios.actions";
 
 interface ModalEditParticipantProps {
-  edit: boolean;
+  edit?: boolean;
 }
 
 const ModalEditParticipant = ({ edit }: ModalEditParticipantProps) => {

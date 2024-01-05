@@ -17,7 +17,7 @@ import {
 } from "@/store/rateios/rateios.actions";
 
 interface ModalDeleteParticipantProps {
-  edit: boolean;
+  edit?: boolean;
 }
 
 const ModalDeleteParticipant = ({ edit }: ModalDeleteParticipantProps) => {
